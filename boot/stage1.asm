@@ -55,14 +55,28 @@ print:
 ; CX: sector number
 ; result is stored in AX
 chsToLBA:
-
-
+  mul word [HeadsPerCylinder]
+  add ax, bx
+  mul word [sectorsPerTrack]
+  add ax, cx
+  dec ax
+  ret
 
 lbaToCHS:
 
 
 start:
 
+
+stage2filename: db "SST2LDR SYS", 0
+stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 0
+
+lbaSector: db 0
+
+currentSector: db 0
+chsCylinder: db 0
+chsHead:     db 0
+chsSector:   db 0
 
 times 510-$+$$ db 0
 dw 0xAA55

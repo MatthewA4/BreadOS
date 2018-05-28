@@ -5,7 +5,7 @@ Contribution guidelines:
   2. clone the repository.
 
   3. Make the changes, add your copyright notice in the header of all source files
-     that you contributed a significant amount of source code to. 5.
+     that you contributed a significant amount of source code to.
      Include name and email in AUTHORS as well.
 
   4. Make a reasonable effort to comment code.

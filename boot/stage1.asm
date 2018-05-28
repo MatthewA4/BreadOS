@@ -162,6 +162,7 @@ start:
   xor cx, cx
   mov ax, 32 ; because the size of a root entry is 32 bytes
   mul word [numRootEntries] ; numRootEntries * 32 = total size of root.
+  div word [bytesPerSector] ; now we know how many sectors are in use.
   xchg ax, cx ;put it in CX, we'll use this total later, toward the end of load.
 
   ;now that we know the size of the root directory, we find the beginning of it.
@@ -176,7 +177,9 @@ start:
   mov word [startOfRoot], ax
   add word [startOfRoot], cx
 
-  mov bx, 0x0200 ; put the FAT here
+  mov bx, word [startOfRoot]
+  mov ax, cx
+  mov dx, 0x0200 ; put the FAT here
   call readSectors ;now read in the root directory
 
 .exception:

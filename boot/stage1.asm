@@ -141,7 +141,7 @@ start:
 
   mov byte [driveNumber], dl ;hopefully it's actually in DL at the start.
   cli ;clear the interrupts, so that we may set the segment flags
-  ; 0x07c0:0x0000 = 0x0000:7c00
+  ; 0x0000:0x07c0 = 0x7c00:0x0000
   mov ax, 0x07c0
   mov es, ax
   mov gs, ax
@@ -158,6 +158,27 @@ start:
   mov si, stage1LoadedCorrectlyMessage
   call print
 
+.loadRoot:
+  xor cx, cx
+  mov ax, 32 ; because the size of a root entry is 32 bytes
+  mul word [numRootEntries] ; numRootEntries * 32 = total size of root.
+  xchg ax, cx ;put it in CX, we'll use this total later, toward the end of load.
+
+  ;now that we know the size of the root directory, we find the beginning of it.
+
+  mov al, byte [numberOfFATs] ; number of fats we got goes in here. AL instead
+                              ; of AX, because numberOfFATs is a byte
+  mul word [sectorsPerFAT] ;since we have the number of FATs (which should be 2), we then
+              ;multiply by the number of sectors per FAT to get the total size
+              ; of the whole FAT section.
+  add ax, word [reservedSectors] ; also add the starting 512-byte boot sector
+                                 ; (would be this assembled file :) )
+  mov word [startOfRoot], ax
+  add word [startOfRoot], cx
+
+  mov bx, 0x0200 ; put the FAT here
+  call readSectors ;now read in the root directory
+
 .exception:
   cli
   hlt
@@ -165,6 +186,7 @@ start:
 stage2Filename: db "SST2LDR SYS", 0
 stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 10, 13, 0
 
+startOfRoot: dw 0
 lbaSector: db 0
 lba: dw 0
 curSector:   dw 0

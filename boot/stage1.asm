@@ -112,15 +112,37 @@ readSectors:
 
 start:
 
+  mov byte [driveNumber], dl ;hopefully it's actually in DL at the start.
+  cli ;clear the interrupts, so that we may set the segment flags
+  ; 0x07c0:0x0000 = 0x0000:7c00
+  mov ax, 0x07c0
+  mov es, ax
+  mov gs, ax
+  mov ds, ax
+  mov fs, ax
+
+  ;create the stack
+  mov ax, 0x0000
+  mov ss, ax
+  mov ax, 0xFFFF
+  mov sp, ax
+  sti
+
+  mov si, stage1LoadedCorrectlyMessage
+  call print
+
+.exception:
+  cli
+  hlt
 
 stage2Filename: db "SST2LDR SYS", 0
-stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 0
+stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 10, 13, 0
 
 lbaSector: db 0
 
 lba: dw 0
 
-curSector: dw 0
+curSector:   dw 0
 chsCylinder: dw 0
 chsHead:     dw 0
 chsSector:   dw 0

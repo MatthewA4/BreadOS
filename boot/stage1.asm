@@ -96,7 +96,7 @@ lbaToCHS:
     mov ax, word [lba]
     div word [sectorsPerTrack]
     add dx, 1
-    mov word chsSector, dx
+    mov word [chsSector], dx
     ret
 ;***************************************************************************
 

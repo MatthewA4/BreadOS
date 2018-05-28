@@ -103,11 +103,34 @@ lbaToCHS:
 
 ;***************************************************************************
 ; Reads sectors from the floppy disk.
-; AX := number of sectors to read
+; AL := number of sectors to read.
 ; BX := starting sector (LBA)
 ; DX := memory location to write read sectors too.
 readSectors:
-
+  mov cx, 0x0004 ; how much we are going to loop, making sure we have grabbed
+                 ; the sectors
+  .grab:
+    push cx ; save counter, we don't want this leftovers...
+    push dx
+    push ax
+    mov ax, bx
+    call lbaToCHS
+    pop ax
+    pop dx
+    mov ah, 0x02 ; AL is the number of sectors to read, so that is already set
+    mov ch, byte [chsCylinder] ; starting cylinder
+    mov cl, byte [chsSector]   ; starting sector
+    mov dh, byte [chsHead]     ; starting head
+    mov dl, [driveNumber]      ; this should be 0x00 anyways.
+    mov bx, dx                 ; this is where the image will get loaded.
+    int 13h ;call the interrupt
+    jc .failed
+    pop cx
+    jmp .gotIt
+.failed:
+    loop .grab
+.gotIt:
+    ret
 
 ;***************************************************************************
 
@@ -140,13 +163,11 @@ stage2Filename: db "SST2LDR SYS", 0
 stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 10, 13, 0
 
 lbaSector: db 0
-
 lba: dw 0
-
 curSector:   dw 0
-chsCylinder: dw 0
-chsHead:     dw 0
-chsSector:   dw 0
+chsCylinder: db 0
+chsHead:     db 0
+chsSector:   db 0
 
 times 510-$+$$ db 0
 dw 0xAA55

@@ -1,4 +1,5 @@
 ; Copyright (C) 2018 Matthew Anderson. mattanderson65@outlook.com
+;See LICENSE file
 
 ; inspired by the bootloader and operating system tutorials at
 ; http://brokenthorn.com . I thank the author so much if he ever reads this.

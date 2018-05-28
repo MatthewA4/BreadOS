@@ -1,4 +1,5 @@
 #Copyright (C) 2018 Matthew Anderson
+#See LICENSE file.
 
 IMGName=floppy.img
 

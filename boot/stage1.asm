@@ -10,7 +10,7 @@ org 0x0
 
 happyBeginning:	jmp start
 
-OEMblock:		         db "mkdosfs "
+oemBlock:		         db "mkdosfs "
 bytesPerSector:		   dw 512
 sectorsPerCluster: 	 db 1
 reservedSectors: 	   dw 1
@@ -100,18 +100,27 @@ lbaToCHS:
     ret
 ;***************************************************************************
 
+;***************************************************************************
+; Reads sectors from the floppy disk.
+; AX := number of sectors to read
+; BX := starting sector (LBA)
+; DX := memory location to write read sectors too.
+readSectors:
+
+
+;***************************************************************************
 
 start:
 
 
-stage2filename: db "SST2LDR SYS", 0
+stage2Filename: db "SST2LDR SYS", 0
 stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 0
 
 lbaSector: db 0
 
 lba: dw 0
 
-currentSector: dw 0
+curSector: dw 0
 chsCylinder: dw 0
 chsHead:     dw 0
 chsSector:   dw 0

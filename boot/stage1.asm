@@ -30,6 +30,7 @@ volumeID: 		       dd 0xdeadbeef
 volumeLabelString: 	 db "BREAD OS   "
 sysIdentifierString: db "FAT12   "
 
+;***************************************************************************
 ; print function, prints what SI is currently pointing to until it reaches
 ; null
 ; be sure to save th value of BX before calling print if need to preserve.
@@ -45,14 +46,17 @@ print:
     jmp .print
     .done:
     ret
+;***************************************************************************
 
+
+;***************************************************************************
 ; https://en.wikipedia.org/wiki/Logical_block_addressing#CHS_conversion
 ; CHS to LBA:
 ; LBA = (CylinderNum * HeadsPerCylinder + HeadNumber) * sectorsPerTrack +
 ; (SectorNum - 1)
-; AX: cylinder number
-; BX: head number
-; CX: sector number
+; AX := cylinder number
+; BX := head number
+; CX := sector number
 ; result is stored in AX
 chsToLBA:
   mul word [HeadsPerCylinder]
@@ -61,8 +65,40 @@ chsToLBA:
   add ax, cx
   dec ax
   ret
+;***************************************************************************
 
+; LBA to CHS:
+; Cylinder/Head/Sector to Logical Block Addressing
+; https://en.wikipedia.org/wiki/Logical_block_addressing#CHS_conversion
+;
+; Cylinder = LBA * (HeadsPerCylinder * sectorsPerTrack)
+; Head = (LBA / sectorsPerTrack) modulus HeadsPerCylinder
+; sector = (LBA modulus sectorsPerTrack) + 1
+;
+; input
+;      AX := LBA
+; output:
+;      chsCylinder := cylinder number
+;      chsHead := head number
+;      chsSector := sector number
 lbaToCHS:
+    mov word [lba], ax
+    mul word [HeadsPerCylinder]
+    mul word [sectorsPerTrack]
+    mov word [chsCylinder], ax
+
+    mov ax, word [lba]
+    div word [sectorsPerTrack]
+    mov ax, dx
+    div word [HeadsPerCylinder]
+    mov word [chsHead],  dx
+
+    mov ax, word [lba]
+    div word [sectorsPerTrack]
+    add dx, 1
+    mov word chsSector, dx
+    ret
+;***************************************************************************
 
 
 start:
@@ -73,10 +109,12 @@ stage1LoadedCorrectlyMessage: db "[+] Stage 1 Loaded Correctly...", 0
 
 lbaSector: db 0
 
-currentSector: db 0
-chsCylinder: db 0
-chsHead:     db 0
-chsSector:   db 0
+lba: dw 0
+
+currentSector: dw 0
+chsCylinder: dw 0
+chsHead:     dw 0
+chsSector:   dw 0
 
 times 510-$+$$ db 0
 dw 0xAA55

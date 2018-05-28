@@ -1,0 +1,9 @@
+
+Prerequisites to have installed.
+  nasm -- https://nasm.us/
+  make
+  GCC and the related build tools.
+
+Build instructions:
+  simply run:
+    make

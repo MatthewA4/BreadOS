@@ -1,13 +1,12 @@
 ;Copyright (C) 2018 Matthew Anderson.
 
-
 bits 16
 
 org 0x0
 
 
 start:
-	mov si, stage2loadedMessage
+	mov si, stage2LoadedMessage
 	call print
 
 	cli
@@ -25,4 +24,4 @@ print:
 
 
 
-stage2loadedMessage: db "STAGE2 found and loaded", 0
+stage2LoadedMessage: db "STAGE2 found and loaded", 0

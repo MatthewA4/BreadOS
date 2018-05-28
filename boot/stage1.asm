@@ -121,13 +121,16 @@ readSectors:
     mov ch, byte [chsCylinder] ; starting cylinder
     mov cl, byte [chsSector]   ; starting sector
     mov dh, byte [chsHead]     ; starting head
-    mov dl, [driveNumber]      ; this should be 0x00 anyways.
+    mov dl, byte [driveNumber]      ; this should be 0x00 anyways.
     mov bx, dx                 ; this is where the image will get loaded.
-    int 13h ;call the interrupt
+    int 0x13 ;call the interrupt
     jc .failed
     pop cx
     jmp .gotIt
 .failed:
+    mov ah, 0x00 ;don't forget to reset the drive before attempting to read.
+    mov dl, byte [driveNumber]
+    int 0x13
     loop .grab
 .gotIt:
     ret

@@ -1,5 +1,5 @@
 #Copyright (C) 2018 Matthew Anderson
-#See LICENSE file.
+#This code is released under the MIT License, see LICENSE file.
 
 IMGName=floppy.img
 

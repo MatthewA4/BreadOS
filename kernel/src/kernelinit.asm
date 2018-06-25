@@ -17,6 +17,9 @@ align 4
     dd multibootFlags
     dd checksum
 
+section .rodata
+bootString db "BreadOS Kernel Loaded, Jumping to Main...", 0
+
 section .bss
 align 16 ; 16 bit alined.
 
@@ -27,9 +30,18 @@ topStack:
 section .text
 global _start
 extern kernelMain
+extern consolePrint
 
 _start:
     mov esp, topStack
+
+    push word 0xFF00
+    lea eax, [bootString]
+    push eax
+    call consolePrint;
+    pop eax
+    pop eax
+
     call kernelMain
     cli
     hlt

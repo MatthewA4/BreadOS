@@ -3,14 +3,17 @@
 
 CC=gcc
 ASM=nasm
-CFLAGS=-c -m32 -ffreestanding -nostdlib -O2 -Wall -Wextra
-ASM_FLAGS=-f elf32
+LNKR=gcc
+
+CFLAGS=-c -g -m32 -ffreestanding -nostdlib -O2 -Wall -Wextra
+ASM_FLAGS=-f elf32 -g
+LNKR_FLAGS=-m32 -g -T kernel/src/link.ld -ffreestanding -O2 -nostdlib
+
 
 BUILD_OBJS := Build/Obj/src/kernel.o \
-						 Build/Obj/src/kernelinit.o
+						 Build/Obj/src/kernelinit.o \
+						 Build/Obj/src/KernelBase/consoleIO/console.o \
 
-LNKR=gcc
-LNKR_FLAGS=-m32 -T kernel/src/link.ld -ffreestanding -O2 -nostdlib
 
 INC := kernel/include
 
@@ -23,7 +26,7 @@ clean:
 
 Build/Bin/bread.elf: $(BUILD_OBJS)
 	mkdir -p $(@D)
-	$(LNKR) $(LNKR_FLAGS) $< -o $@
+	$(LNKR) $(LNKR_FLAGS) $^ -o $@
 
 
 Build/Obj/src/%.o: kernel/src/%.c
@@ -33,5 +36,9 @@ Build/Obj/src/%.o: kernel/src/%.c
 Build/Obj/src/%.o: kernel/src/%.asm
 	mkdir -p $(@D)
 	$(ASM) $(ASM_FLAGS) $< -o $@
+
+Build/Obj/src/KernelBase/consoleIO/%.o: kernel/src/KernelBase/consoleIO/%.c
+	mkdir -p $(@D)
+	$(CC) $(CFLAGS) $< -o $@ -I $(INC)
 
 #*****************************************************************************

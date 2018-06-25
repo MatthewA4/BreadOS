@@ -8,9 +8,12 @@ Contribution guidelines:
      that you contributed a significant amount of source code to.
      Include name and email in AUTHORS as well.
 
-  4. Make a reasonable effort to comment code.
+  4. Make sure you are able to compile with your changes before creating the
+     merge request.
 
-  5. submit a pull request.
+  5. Make a reasonable effort to comment code.
+
+  6. submit a pull request.
 
 Code standards:
   1. All code must use space indentation, no tabs please.

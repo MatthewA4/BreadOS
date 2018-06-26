@@ -6,7 +6,7 @@ ASM=nasm
 LNKR=gcc
 
 CFLAGS=-c -m32 -ffreestanding -nostdlib -O2 -Wall -Wextra
-ASM_FLAGS=-f elf32
+ASM_FLAGS=-O99 -f elf32
 LNKR_FLAGS=-m32 -T kernel/src/link.ld -ffreestanding -O2 -nostdlib
 
 

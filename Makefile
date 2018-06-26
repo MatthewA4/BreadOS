@@ -5,9 +5,9 @@ CC=gcc
 ASM=nasm
 LNKR=gcc
 
-CFLAGS=-c -g -m32 -ffreestanding -nostdlib -O2 -Wall -Wextra
-ASM_FLAGS=-f elf32 -g
-LNKR_FLAGS=-m32 -g -T kernel/src/link.ld -ffreestanding -O2 -nostdlib
+CFLAGS=-c -m32 -ffreestanding -nostdlib -O2 -Wall -Wextra
+ASM_FLAGS=-f elf32
+LNKR_FLAGS=-m32 -T kernel/src/link.ld -ffreestanding -O2 -nostdlib
 
 
 BUILD_OBJS := Build/Obj/src/kernel.o \

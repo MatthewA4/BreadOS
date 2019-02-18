@@ -8,3 +8,4 @@ MIT license (see LICENSE).
 Project leader: Matthew Anderson
 contact: mattanderson65@outlook.com
 website: https://sites.google.com/site/mattanderson3d/
+breados on Freenode IRC

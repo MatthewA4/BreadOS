@@ -1,4 +1,4 @@
-Contribution guidelines:
+# Contribution guidelines:
 
   1. Fork.
 
@@ -15,7 +15,7 @@ Contribution guidelines:
 
   6. submit a pull request.
 
-Code standards:
+## Code standards:
   1. All code must use space indentation, no tabs please.
 
   2. K&R Coding style. https://en.wikipedia.org/wiki/Indentation_style#K.26R

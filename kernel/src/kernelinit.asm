@@ -11,11 +11,18 @@ multibootFlags equ alignPageBoundary | memoryInfo
 magicNumber equ 0x1BADB002
 checksum equ -(magicNumber + multibootFlags)
 
-section .multiboot
+section .__multiboot
 align 4
+
+extern code, bss, end
     dd magicNumber
     dd multibootFlags
     dd checksum
+
+    dd code
+    dd bss
+    dd end
+    dd _start
 
 section .rodata
 bootString db "BreadOS Kernel Loaded, Jumping to Main...", 0
@@ -35,7 +42,9 @@ extern consolePrint
 _start:
     mov esp, topStack
 
-    push word 0xFF00
+    xor eax, eax
+    mov ax, 0xFF00
+    push eax
     lea eax, [bootString]
     push eax
     call consolePrint;

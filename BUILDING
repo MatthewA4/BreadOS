@@ -7,3 +7,5 @@ Prerequisites to have installed.
 Build instructions:
   simply run:
     make
+
+kernel ELF file is designed to be bootable with GRUB.
